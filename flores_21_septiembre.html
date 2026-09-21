@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Una Sorpresa Amarilla Para Ti 🌻</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #1e1b4b, #0f172a, #020617);
+      color: #fff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 520px;
+      width: 90%;
+      padding: 20px;
+    }
+
+    /* Tarjeta de Inicio */
+    .gift-box {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      border-radius: 28px;
+      padding: 45px 30px;
+      box-shadow: 0 20px 40px rgba(255, 215, 0, 0.15);
+      transition: all 0.5s ease;
+    }
+
+    .flower-icon {
+      font-size: 85px;
+      margin-bottom: 20px;
+      display: inline-block;
+      animation: floatPulse 2.5s infinite ease-in-out;
+    }
+
+    @keyframes floatPulse {
+      0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 12px rgba(255,215,0,0.6)); }
+      50% { transform: translateY(-10px) scale(1.08); filter: drop-shadow(0 0 28px rgba(255,215,0,0.95)); }
+    }
+
+    .title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #fde047;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #cbd5e1;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, #facc15, #eab308);
+      color: #020617;
+      border: none;
+      padding: 15px 36px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(234, 179, 8, 0.45);
+      transition: all 0.3s ease;
+    }
+
+    .btn-main:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(234, 179, 8, 0.7);
+    }
+
+    /* Carta Secreta */
+    .letter-card {
+      display: none;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 2px solid #facc15;
+      border-radius: 28px;
+      padding: 35px 25px;
+      box-shadow: 0 20px 50px rgba(250, 204, 21, 0.25);
+      animation: openAnimation 0.8s ease forwards;
+    }
+
+    @keyframes openAnimation {
+      from { opacity: 0; transform: scale(0.85) translateY(30px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .letter-title {
+      font-size: 2rem;
+      color: #fef08a;
+      margin-bottom: 18px;
+    }
+
+    .letter-body {
+      font-size: 1.05rem;
+      color: #f1f5f9;
+      line-height: 1.7;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    /* Cuadrícula de Pétalos Interactivos */
+    .petals-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .petal-btn {
+      background: rgba(253, 224, 71, 0.12);
+      border: 1px solid rgba(253, 224, 71, 0.4);
+      color: #fde047;
+      padding: 12px 10px;
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .petal-btn:hover, .petal-btn.active {
+      background: #facc15;
+      color: #020617;
+      border-color: #facc15;
+      transform: translateY(-2px);
+    }
+
+    .message-display {
+      margin-top: 22px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 4px solid #facc15;
+      border-radius: 14px;
+      font-style: italic;
+      color: #fef08a;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      min-height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* --- NUEVO: Ajustes 100% Responsivos para Teléfonos Móviles --- */
+    @media (max-width: 480px) {
+      .gift-box {
+        padding: 30px 20px; /* Reduce márgenes internos para que quepa mejor */
+      }
+      
+      .letter-card {
+        padding: 25px 15px;
+      }
+      
+      .flower-icon {
+        font-size: 70px;
+      }
+      
+      .title {
+        font-size: 1.6rem;
+      }
+      
+      .letter-title {
+        font-size: 1.7rem;
+      }
+      
+      .subtitle, .letter-body, .message-display {
+        font-size: 0.95rem;
+      }
+      
+      .btn-main {
+        padding: 12px 28px;
+        font-size: 1rem;
+      }
+      
+      .petals-grid {
+        /* En pantallas muy delgadas, los botones se colocan uno debajo de otro para no aplastar el texto */
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <div class="container">
+    <!-- Estado 1: Regalo Cerrado -->
+    <div class="gift-box" id="giftBox">
+      <div class="flower-icon">🌻</div>
+      <h1 class="title">Una Sorpresa Especial</h1>
+      <p class="subtitle">Hoy es 21 de septiembre y alguien especial preparó unas flores infinitas para ti. Haz clic para descubrirlas.</p>
+      <button class="btn-main" onclick="openGift()">Abrir regalo 💛</button>
+    </div>
+
+    <!-- Estado 2: Carta Desplegada -->
+    <div class="letter-card" id="letterCard">
+      <h2 class="letter-title">¡Feliz 21 de Septiembre! 🌻</h2>
+      
+      <p class="letter-body">
+        Hoy el mundo entero celebra regalando flores amarillas para llenar de luz a las personas más especiales.<br><br>
+        No quería darte flores comunes que se marchitan en unos días. Por eso te regalé estas <strong>flores eternas en código</strong>, hechas especialmente para recordarte lo mucho que brillas.
+      </p>
+
+      <p style="font-size: 0.9rem; color: #cbd5e1; margin-bottom: 10px;">Toca cada pétalo para leer una nota secreta:</p>
+      
+      <div class="petals-grid">
+        <button class="petal-btn" onclick="showMessage(0, this)">🌼 Pétalo 1</button>
+        <button class="petal-btn" onclick="showMessage(1, this)">🌻 Pétalo 2</button>
+        <button class="petal-btn" onclick="showMessage(2, this)">✨ Pétalo 3</button>
+        <button class="petal-btn" onclick="showMessage(3, this)">💛 Pétalo 4</button>
+      </div>
+
+      <div class="message-display" id="messageDisplay">
+        Toca cualquier pétalo de arriba... ✨
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mensajes personalizados de los pétalos
+    const messages = [
+      "\"Tu presencia tiene esa capacidad única de alegrar hasta el día más gris. Gracias por existir.\"",
+      "\"Dicen que las flores amarillas representan la luz y la energía positiva... exactamente lo que tú me transmites.\"",
+      "\"El mundo es un lugar mucho más bonito y cálido desde que estás en él.\"",
+      "\"Estas flores nunca se marchitarán, igual que el cariño tan bonito que te tengo. ¡Feliz día!\""
+    ];
+
+    function showMessage(index, element) {
+      document.querySelectorAll('.petal-btn').forEach(btn => btn.classList.remove('active'));
+      element.classList.add('active');
+      const display = document.getElementById('messageDisplay');
+      display.style.opacity = 0;
+      setTimeout(() => {
+        display.innerText = messages[index];
+        display.style.opacity = 1;
+      }, 150);
+    }
+
+    function openGift() {
+      document.getElementById('giftBox').style.display = 'none';
+      document.getElementById('letterCard').style.display = 'block';
+      burstPetals();
+    }
+
+    // Animación del Lienzo (Lluvia de Pétalos Amarillos)
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const petals = Array.from({ length: 45 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height - height,
+      size: Math.random() * 8 + 6,
+      speedY: Math.random() * 1.5 + 0.8,
+      speedX: Math.random() * 1 - 0.5,
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.03,
+      color: ['#fde047', '#facc15', '#eab308', '#fef08a'][Math.floor(Math.random() * 4)]
+    }));
+
+    function burstPetals() {
+      for (let i = 0; i < 30; i++) {
+        petals.push({
+          x: width / 2,
+          y: height / 2,
+          size: Math.random() * 10 + 6,
+          speedY: (Math.random() - 0.5) * 8,
+          speedX: (Math.random() - 0.5) * 8,
+          angle: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.05,
+          color: '#facc15'
+        });
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      petals.forEach(p => {
+        p.y += p.speedY;
+        p.x += Math.sin(p.y * 0.01) + p.speedX;
+        p.angle += p.spin;
+
+        if (p.y > height) {
+          p.y = -20;
+          p.x = Math.random() * width;
+        }
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
